@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>QA Marketplace – 90-Day Founder Companion</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f7fb;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    header {
+      background: #3366cc;
+      color: #fff;
+      padding: 16px 24px;
+    }
+    header h1 { margin: 0; font-size: 20px; }
+    header p { margin: 4px 0 0; font-size: 13px; opacity: 0.9; }
+    main { max-width: 900px; margin: 24px auto; padding: 0 16px 32px; }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.04);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .row { display: flex; flex-wrap: wrap; gap: 16px; }
+    .col { flex: 1; min-width: 260px; }
+    label { font-size: 14px; font-weight: 600; display: block; margin-bottom: 4px; }
+    select {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #cdd4e7;
+      font-size: 14px;
+    }
+    h2 { margin-top: 0; font-size: 18px; }
+    ul.tasks { list-style: none; padding: 0; margin: 0; }
+    ul.tasks li {
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+      font-size: 14px;
+    }
+    ul.tasks input[type="checkbox"] { margin-right: 8px; margin-top: 2px; }
+    textarea {
+      width: 100%;
+      min-height: 140px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid #cdd4e7;
+      font-size: 13px;
+      resize: vertical;
+      box-sizing: border-box;
+    }
+    .progress-bar-wrap {
+      background: #e3e9fa;
+      border-radius: 999px;
+      overflow: hidden;
+      height: 10px;
+      margin-top: 8px;
+    }
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #3366cc;
+      transition: width 0.25s ease-out;
+    }
+    .progress-text { font-size: 13px; margin-top: 4px; color: #555; }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e3e9fa;
+      color: #3366cc;
+      margin-left: 6px;
+    }
+    button {
+      background: #3366cc;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    button.secondary {
+      background: #ffffff;
+      color: #3366cc;
+      border: 1px solid #cdd4e7;
+      margin-left: 8px;
+    }
+    button.danger {
+      background: #fff0f0;
+      color: #c0392b;
+      border: 1px solid #f5c6c6;
+    }
+    button:hover { opacity: 0.85; }
+    .encouragement { font-size: 14px; line-height: 1.5; }
+    .encouragement strong { display: block; margin-bottom: 4px; }
+    .verse { font-size: 13px; color: #555; margin-top: 6px; font-style: italic; }
+    .small { font-size: 12px; color: #666; }
+    .notes-col { padding-right: 16px; }
+    .helper-text { font-size: 12px; color: #6b7280; margin-bottom: 8px; }
+    .sticky-toolbar { display: flex; gap: 8px; margin-bottom: 8px; }
+    .sticky-toolbar button { border-radius: 999px; border: none; padding: 6px 14px; font-size: 12px; cursor: pointer; background: #3366cc; color: #ffffff; }
+    .sticky-toolbar button:nth-child(2) { background: #e5e7eb; color: #374151; }
+    .sticky-board { display: flex; flex-wrap: wrap; gap: 12px; padding: 4px 0; min-height: 60px; }
+    .sticky-note {
+      background: #fff8c2;
+      border-radius: 8px;
+      padding: 10px 12px;
+      min-width: 160px;
+      min-height: 80px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      font-size: 13px;
+      color: #374151;
+      cursor: grab;
+      outline: none;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    .sticky-note:focus { outline: 2px solid #3366cc; cursor: text; }
+
+    /* ===== TO-DO LIST STYLES ===== */
+    #todoSection h2 { margin-top: 0; }
+
+    .todo-toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .todo-toolbar input[type="text"] {
+      flex: 1;
+      min-width: 200px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #cdd4e7;
+      font-size: 14px;
+    }
+    .todo-task {
+      border: 1px solid #e0e6f5;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+    .todo-task-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #f0f4ff;
+      flex-wrap: wrap;
+    }
+    .todo-task-title {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a2e;
+      min-width: 120px;
+    }
+    .status-select {
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+    }
+    .status-todo    { background: #e3e9fa; color: #3366cc; }
+    .status-inprog  { background: #fff3cd; color: #856404; }
+    .status-done    { background: #d4edda; color: #155724; }
+    .status-abandon { background: #f8d7da; color: #721c24; }
+
+    .todo-subtasks {
+      padding: 8px 14px 10px 14px;
+      background: #fff;
+    }
+    .subtask-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      font-size: 13px;
+    }
+    .subtask-row input[type="checkbox"] { flex-shrink: 0; }
+    .subtask-row span { flex: 1; color: #333; }
+    .subtask-row span.done-text { text-decoration: line-through; color: #999; }
+    .subtask-delete-btn {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 0 4px;
+      line-height: 1;
+    }
+    .subtask-delete-btn:hover { color: #c0392b; }
+
+    .add-subtask-row { display: flex; gap: 6px; margin-top: 6px; }
+    .add-subtask-row input[type="text"] {
+      flex: 1;
+      padding: 6px 10px;
+      border-radius: 8px;
+      border: 1px solid #cdd4e7;
+      font-size: 13px;
+    }
+    .add-subtask-row button { padding: 5px 12px; font-size: 12px; }
+
+    .delete-task-btn {
+      background: none;
+      border: none;
+      color: #ccc;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 0 2px;
+      line-height: 1;
+    }
+    .delete-task-btn:hover { color: #c0392b; }
+
+    .todo-summary {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .todo-summary span { display: inline-flex; align-items: center; gap: 4px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .dot-todo    { background: #3366cc; }
+    .dot-inprog  { background: #f0ad4e; }
+    .dot-done    { background: #28a745; }
+    .dot-abandon { background: #dc3545; }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>QA Marketplace – 90-Day Founder Companion</h1>
+  <p>Track your weekly actions, stay aligned to your mission, and be reminded you're not building this alone.</p>
+</header>
+
+<main>
+  <div class="card row" style="align-items:center;">
+    <div class="col">
+      <label for="weekSelect">Current Week</label>
+      <select id="weekSelect"></select>
+      <div class="small" id="weekFocusText"></div>
+    </div>
+    <div class="col">
+      <label>Progress this week</label>
+      <div class="progress-bar-wrap">
+        <div id="progressBar" class="progress-bar"></div>
+      </div>
+      <div id="progressText" class="progress-text">0% complete</div>
+    </div>
+  </div>
+
+  <div class="card row">
+    <div class="col">
+      <h2>Weekly Actions <span class="pill">Track A – Proof</span> <span class="pill">Track B – Revenue</span></h2>
+      <ul id="taskList" class="tasks"></ul>
+    </div>
+    <div class="col notes-col">
+      <h2>Notes & Reflections</h2>
+      <textarea id="notes" placeholder="What did you learn, notice, or feel this week?"></textarea>
+    </div>
+  </div>
+
+  <div class="card" id="todoSection">
+    <h2>To-Do List</h2>
+    <p class="helper-text">
+      Add main tasks, break them into subtasks, and track each item's status. Everything saves automatically.
+    </p>
+    <div class="todo-summary" id="todoSummary"></div>
+    <div class="todo-toolbar">
+      <input type="text" id="newTaskInput" placeholder="New task title…" />
+      <button id="addTaskBtn">+ Add Task</button>
+    </div>
+    <div id="todoList"></div>
+  </div>
+
+  <div class="card">
+    <h2>Sticky Notes (Ideas & Sparks)</h2>
+    <p class="helper-text">Jot quick ideas here. Click to edit, drag to reorder.</p>
+    <div class="sticky-toolbar">
+      <button id="addNoteBtn" type="button">+ New note</button>
+      <button id="clearNotesBtn" type="button">Clear all</button>
+    </div>
+    <div id="stickyBoard" class="sticky-board"></div>
+  </div>
+
+  <div class="card">
+    <h2>Encouragement & Guidance</h2>
+    <div id="encouragementBox" class="encouragement">
+      Complete a task or click "Need Guidance" when you feel stuck.
+    </div>
+    <div style="margin-top:10px;">
+      <button id="guidanceBtn" class="secondary">Need Guidance</button>
+    </div>
+  </div>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // ------------------------------------------------------------
+  // Safe storage wrapper (prevents app from dying if storage blocked)
+  // ------------------------------------------------------------
+  const storage = {
+    get(key, fallback = null) {
+      try {
+        const v = localStorage.getItem(key);
+        return v === null ? fallback : v;
+      } catch (e) {
+        return fallback;
+      }
+    },
+    set(key, value) {
+      try { localStorage.setItem(key, value); } catch (e) {}
+    },
+    remove(key) {
+      try { localStorage.removeItem(key); } catch (e) {}
+    }
+  };
+
+  // ============================================================
+  // WEEKLY PLAN DATA
+  // ============================================================
+  const weeklyPlan = {
+    1: { focus: "Clarify QA Marketplace vision, role focus, and current opportunities.",
+      tasks: [
+        "Write your one-line UVP and pin it somewhere visible.",
+        "Define your primary role archetype (QA Manager / QA Architect with hands-on automation + CI/CD).",
+        "List your current warm opportunities (Rap, founders, recruiters, PwC, etc.)."
+      ]},
+    2: { focus: "Tighten the 3-layer evaluation system (Profiling, DE Video, Hackathon).",
+      tasks: [
+        "Finalize Domain Expertise video prompts for manager/architect roles.",
+        "Finalize 2 live hackathon scenarios focused on automation + CI/CD leadership.",
+        "Finalize your scoring template (CV + DE + Hackathon + summary)."
+      ]},
+    3: { focus: "Apply the system to real candidates and adjust.",
+      tasks: [
+        "Run at least 1–2 candidates through the full 3-layer evaluation.",
+        "Capture their feedback on clarity and difficulty of each step.",
+        "Adjust instructions and templates based on what you learned."
+      ]},
+    4: { focus: "Clarify ideal client profile and initiate a few warm conversations.",
+      tasks: [
+        "Write a short profile of your ideal client (fast-moving startup with QA gaps, needs builder-type leader).",
+        "List at least 10 potential founders/partners who fit that profile.",
+        "Send 2–3 warm, low-pressure messages offering help (not a hard pitch)."
+      ]},
+    5: { focus: "Deliver at least one QA advisory or review for real context.",
+      tasks: [
+        "Offer a lightweight QA review to one engaged founder (even free/beta).",
+        "Document QA gaps, risks, and quick wins you see.",
+        "Turn your notes into a reusable 1-page QA advisory checklist."
+      ]},
+    6: { focus: "Sharpen your explanation of QA Marketplace for non-technical founders.",
+      tasks: [
+        "Refine your LinkedIn company page About section.",
+        "Draft a short pitch deck or carousel (problem → your system → outcomes).",
+        "Practice a 30–60 second spoken explanation of QA Marketplace."
+      ]},
+    7: { focus: "Strengthen and categorize your QA talent pool.",
+      tasks: [
+        "Organize existing QA profiles into role types (builder manager/architect, senior automation, etc.).",
+        "Tag each with automation stack, CI/CD exposure, and industries.",
+        "Identify gaps in your pool (e.g., API-heavy, performance, mobile)."
+      ]},
+    8: { focus: "Create 2–3 flagship candidate profiles you're proud to send.",
+      tasks: [
+        "Select 2–3 strongest candidates you'd confidently refer now.",
+        "Write a short strengths summary and fit rationale for each.",
+        "Store them in a 'Gold Profiles' folder ready for client sharing."
+      ]},
+    9: { focus: "Convert proof into at least one paid outcome.",
+      tasks: [
+        "With Rap or another partner, focus on one concrete placement OR paid advisory.",
+        "Define a simple scope and price for a mini QA consultation.",
+        "Send at least one written offer (even if small or discounted)."
+      ]},
+    10: { focus: "Reduce mental load with reusable communication templates.",
+      tasks: [
+        "Finalize candidate invitation + evaluation instructions.",
+        "Finalize client/beta offer intro email.",
+        "Finalize referral/shortlist email template."
+      ]},
+    11: { focus: "Review your progress and adjust direction if needed.",
+      tasks: [
+        "Review which activities gave you energy vs. drained you.",
+        "List what worked: channels, messages, candidate types.",
+        "Decide one thing to stop and one thing to double down on."
+      ]},
+    12: { focus: "Capture proof, feedback, and small stories.",
+      tasks: [
+        "Ask at least one founder or candidate for short feedback.",
+        "Write 1–2 mini case notes on where your system helped.",
+        "Save quotes and insights in a 'Proof & Stories' file."
+      ]},
+    13: { focus: "Close the 90 days with reflection and a next-step decision.",
+      tasks: [
+        "Review your notes and progress across all weeks.",
+        "Answer: What did I prove? What did I earn (money + trust)?",
+        "Decide your focus for the next 90 days (steady, grow a bit, or pause)."
+      ]}
+  };
+
+  // ============================================================
+  // ENCOURAGEMENTS  (FIXED QUOTES)
+  // ============================================================
+  const encouragements = [
+    { text: "Small, faithful steps still move the vision forward.", verse: "“Commit thy works unto the LORD, and thy thoughts shall be established.” (Proverbs 16:3)" },
+    { text: "You are not behind; you are building something carefully.", verse: "“In quietness and in confidence shall be your strength.” (Isaiah 30:15)" },
+    { text: "God sees the work no one else sees.", verse: "“For God is not unrighteous to forget your work and labour of love.” (Hebrews 6:10)" },
+    { text: "When things feel unclear, you're invited to ask for wisdom.", verse: "“If any of you lack wisdom, let him ask of God… and it shall be given him.” (James 1:5)" },
+    { text: "You don't have to carry this all in your own strength.", verse: "“Cast thy burden upon the LORD, and he shall sustain thee.” (Psalm 55:22)" }
+  ];
+
+  // ============================================================
+  // DOM REFS
+  // ============================================================
+  const weekSelect     = document.getElementById("weekSelect");
+  const taskList       = document.getElementById("taskList");
+  const notesArea      = document.getElementById("notes");
+  const weekFocusText  = document.getElementById("weekFocusText");
+  const progressBar    = document.getElementById("progressBar");
+  const progressText   = document.getElementById("progressText");
+  const encouragementBox = document.getElementById("encouragementBox");
+  const guidanceBtn    = document.getElementById("guidanceBtn");
+
+  // Populate week dropdown
+  Object.keys(weeklyPlan).forEach(week => {
+    const opt = document.createElement("option");
+    opt.value = week;
+    opt.textContent = `Week ${week}`;
+    weekSelect.appendChild(opt);
+  });
+
+  function storageKey(prefix, week) { return `${prefix}_week_${week}`; }
+
+  function loadWeek(week) {
+    if (!weeklyPlan[week]) week = Object.keys(weeklyPlan)[0];
+    const plan = weeklyPlan[week];
+    weekFocusText.textContent = plan.focus;
+    taskList.innerHTML = "";
+
+    let savedStates = [];
+    try { savedStates = JSON.parse(storage.get(storageKey("tasks", week), "[]")) || []; }
+    catch { savedStates = []; }
+
+    plan.tasks.forEach((task, index) => {
+      const li = document.createElement("li");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.dataset.index = index;
+      checkbox.checked = !!savedStates[index];
+
+      const span = document.createElement("span");
+      span.textContent = task;
+
+      checkbox.addEventListener("change", () => {
+        saveTaskState(week);
+        updateProgress(week);
+        if (checkbox.checked) showRandomEncouragement();
+      });
+
+      li.appendChild(checkbox);
+      li.appendChild(span);
+      taskList.appendChild(li);
+    });
+
+    notesArea.value = storage.get(storageKey("notes", week), "") || "";
+    updateProgress(week);
+  }
+
+  function saveTaskState(week) {
+    const checkboxes = taskList.querySelectorAll("input[type='checkbox']");
+    const states = Array.from(checkboxes).map(cb => cb.checked);
+    storage.set(storageKey("tasks", week), JSON.stringify(states));
+  }
+
+  function updateProgress() {
+    const checkboxes = taskList.querySelectorAll("input[type='checkbox']");
+    if (!checkboxes.length) {
+      progressBar.style.width = "0%";
+      progressText.textContent = "0% complete";
+      return;
+    }
+    const total = checkboxes.length;
+    const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
+    const percent = Math.round((completed / total) * 100);
+    progressBar.style.width = percent + "%";
+    progressText.textContent = `${percent}% complete (${completed}/${total} tasks)`;
+  }
+
+  function showRandomEncouragement() {
+    const item = encouragements[Math.floor(Math.random() * encouragements.length)];
+    encouragementBox.innerHTML = `<strong>${item.text}</strong><div class="verse">${item.verse}</div>`;
+  }
+
+  weekSelect.addEventListener("change", () => loadWeek(weekSelect.value));
+  notesArea.addEventListener("input", () => storage.set(storageKey("notes", weekSelect.value), notesArea.value));
+  guidanceBtn.addEventListener("click", showRandomEncouragement);
+
+  weekSelect.value = "1";
+  loadWeek("1");
+
+  // ============================================================
+  // TO-DO LIST  — safe localStorage key: "qa_todos"
+  // ============================================================
+  const TODO_KEY = "qa_todos";
+
+  const STATUS_CONFIG = {
+    todo:    { label: "To Do",       cls: "status-todo" },
+    inprog:  { label: "In Progress", cls: "status-inprog" },
+    done:    { label: "Completed",   cls: "status-done" },
+    abandon: { label: "Abandoned",   cls: "status-abandon" }
+  };
+
+  function getTodos() {
+    try { return JSON.parse(storage.get(TODO_KEY, "[]")) || []; }
+    catch { return []; }
+  }
+
+  function saveTodos(todos) {
+    storage.set(TODO_KEY, JSON.stringify(todos));
+  }
+
+  function uid() { return "id-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7); }
+
+  function normalizeTask(t) {
+    return {
+      id: t.id || uid(),
+      title: t.title || "Untitled",
+      status: STATUS_CONFIG[t.status] ? t.status : "todo",
+      subtasks: Array.isArray(t.subtasks) ? t.subtasks : []
+    };
+  }
+
+  function renderTodoSummary(todos) {
+    const summary = document.getElementById("todoSummary");
+    const counts = { todo: 0, inprog: 0, done: 0, abandon: 0 };
+    todos.forEach(t => { if (counts[t.status] !== undefined) counts[t.status]++; });
+    summary.innerHTML = `
+      <span><span class="dot dot-todo"></span>${counts.todo} To Do</span>
+      <span><span class="dot dot-inprog"></span>${counts.inprog} In Progress</span>
+      <span><span class="dot dot-done"></span>${counts.done} Completed</span>
+      <span><span class="dot dot-abandon"></span>${counts.abandon} Abandoned</span>
+      <span style="color:#aaa;">|</span>
+      <span>${todos.length} total task${todos.length !== 1 ? "s" : ""}</span>`;
+  }
+
+  function applyStatusClass(sel, status) {
+    sel.className = "status-select";
+    const cfg = STATUS_CONFIG[status];
+    if (cfg) sel.classList.add(cfg.cls);
+  }
+
+  function buildSubtaskRow(taskId, sub) {
+    const row = document.createElement("div");
+    row.className = "subtask-row";
+
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = !!sub.done;
+
+    const label = document.createElement("span");
+    label.textContent = sub.text || "";
+    if (sub.done) label.classList.add("done-text");
+
+    cb.addEventListener("change", () => {
+      const todos = getTodos().map(normalizeTask);
+      const t = todos.find(t => t.id === taskId);
+      if (t) {
+        const s = t.subtasks.find(s => s.id === sub.id);
+        if (s) { s.done = cb.checked; saveTodos(todos); }
+      }
+      label.classList.toggle("done-text", cb.checked);
+    });
+
+    const delBtn = document.createElement("button");
+    delBtn.className = "subtask-delete-btn";
+    delBtn.title = "Remove subtask";
+    delBtn.textContent = "×";
+    delBtn.addEventListener("click", () => {
+      const todos = getTodos().map(normalizeTask);
+      const t = todos.find(t => t.id === taskId);
+      if (t) {
+        t.subtasks = t.subtasks.filter(s => s.id !== sub.id);
+        saveTodos(todos);
+      }
+      row.remove();
+      renderTodoSummary(getTodos().map(normalizeTask));
+    });
+
+    row.appendChild(cb);
+    row.appendChild(label);
+    row.appendChild(delBtn);
+    return row;
+  }
+
+  function renderTodos() {
+    const container = document.getElementById("todoList");
+    const todos = getTodos().map(normalizeTask);
+    saveTodos(todos); // persist normalized shape
+
+    container.innerHTML = "";
+    renderTodoSummary(todos);
+
+    todos.forEach(task => {
+      const wrapper = document.createElement("div");
+      wrapper.className = "todo-task";
+      wrapper.dataset.id = task.id;
+
+      const header = document.createElement("div");
+      header.className = "todo-task-header";
+
+      const titleEl = document.createElement("div");
+      titleEl.className = "todo-task-title";
+      titleEl.textContent = task.title;
+
+      const statusSel = document.createElement("select");
+      statusSel.className = "status-select";
+      Object.entries(STATUS_CONFIG).forEach(([val, cfg]) => {
+        const opt = document.createElement("option");
+        opt.value = val;
+        opt.textContent = cfg.label;
+        opt.selected = (val === task.status);
+        statusSel.appendChild(opt);
+      });
+      applyStatusClass(statusSel, task.status);
+
+      statusSel.addEventListener("change", () => {
+        const todos = getTodos().map(normalizeTask);
+        const t = todos.find(t => t.id === task.id);
+        if (t) { t.status = statusSel.value; saveTodos(todos); }
+        applyStatusClass(statusSel, statusSel.value);
+        renderTodoSummary(getTodos().map(normalizeTask));
+      });
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "delete-task-btn";
+      delBtn.title = "Delete this task";
+      delBtn.textContent = "×";
+      delBtn.addEventListener("click", () => {
+        if (!confirm(`Delete task "${task.title}"?`)) return;
+        const todos = getTodos().map(normalizeTask).filter(t => t.id !== task.id);
+        saveTodos(todos);
+        renderTodos();
+      });
+
+      header.appendChild(titleEl);
+      header.appendChild(statusSel);
+      header.appendChild(delBtn);
+
+      const subtaskBody = document.createElement("div");
+      subtaskBody.className = "todo-subtasks";
+
+      (task.subtasks || []).forEach(sub => subtaskBody.appendChild(buildSubtaskRow(task.id, sub)));
+
+      const addRow = document.createElement("div");
+      addRow.className = "add-subtask-row";
+      const subInput = document.createElement("input");
+      subInput.type = "text";
+      subInput.placeholder = "Add a subtask…";
+      const subAddBtn = document.createElement("button");
+      subAddBtn.textContent = "Add";
+
+      subAddBtn.addEventListener("click", () => {
+        const text = subInput.value.trim();
+        if (!text) return;
+        const todos = getTodos().map(normalizeTask);
+        const t = todos.find(t => t.id === task.id);
+        if (t) {
+          t.subtasks.push({ id: uid(), text, done: false });
+          saveTodos(todos);
+        }
+        subInput.value = "";
+        renderTodos();
+      });
+
+      subInput.addEventListener("keydown", e => { if (e.key === "Enter") subAddBtn.click(); });
+
+      addRow.appendChild(subInput);
+      addRow.appendChild(subAddBtn);
+      subtaskBody.appendChild(addRow);
+
+      wrapper.appendChild(header);
+      wrapper.appendChild(subtaskBody);
+      container.appendChild(wrapper);
+    });
+  }
+
+  document.getElementById("addTaskBtn").addEventListener("click", () => {
+    const input = document.getElementById("newTaskInput");
+    const title = input.value.trim();
+    if (!title) return;
+    const todos = getTodos().map(normalizeTask);
+    todos.push({ id: uid(), title, status: "todo", subtasks: [] });
+    saveTodos(todos);
+    input.value = "";
+    renderTodos();
+  });
+
+  document.getElementById("newTaskInput").addEventListener("keydown", e => {
+    if (e.key === "Enter") document.getElementById("addTaskBtn").click();
+  });
+
+  renderTodos();
+
+  // ============================================================
+  // STICKY NOTES
+  // ============================================================
+  const STICKY_KEY = "qaStickyNotes";
+  function getStickyNotes() {
+    try { return JSON.parse(storage.get(STICKY_KEY, "[]")) || []; }
+    catch { return []; }
+  }
+  function saveStickyNotes(notes) { storage.set(STICKY_KEY, JSON.stringify(notes)); }
+
+  let draggedNoteId = null;
+
+  function renderStickyNotes() {
+    const board = document.getElementById("stickyBoard");
+    const notes = getStickyNotes();
+    board.innerHTML = "";
+
+    notes.forEach(note => {
+      const div = document.createElement("div");
+      div.className = "sticky-note";
+      div.contentEditable = "true";
+      div.draggable = true;
+      div.dataset.id = note.id;
+      div.textContent = note.text || "";
+
+      div.addEventListener("blur", () => {
+        const updated = getStickyNotes();
+        const idx = updated.findIndex(n => n.id === note.id);
+        if (idx !== -1) {
+          updated[idx].text = div.textContent.trim();
+          saveStickyNotes(updated);
+        }
+      });
+
+      div.addEventListener("dragstart", e => {
+        draggedNoteId = note.id;
+        e.dataTransfer.effectAllowed = "move";
+      });
+      div.addEventListener("dragover", e => e.preventDefault());
+      div.addEventListener("drop", e => {
+        e.preventDefault();
+        const targetId = e.currentTarget.dataset.id;
+        if (!draggedNoteId || draggedNoteId === targetId) return;
+
+        const updated = getStickyNotes();
+        const fromIndex = updated.findIndex(n => n.id === draggedNoteId);
+        const toIndex = updated.findIndex(n => n.id === targetId);
+        if (fromIndex === -1 || toIndex === -1) return;
+
+        const [moved] = updated.splice(fromIndex, 1);
+        updated.splice(toIndex, 0, moved);
+        saveStickyNotes(updated);
+        renderStickyNotes();
+      });
+
+      board.appendChild(div);
+    });
+  }
+
+  function addStickyNote() {
+    const notes = getStickyNotes();
+    const id = "note-" + Date.now();
+    notes.push({ id, text: "" });
+    saveStickyNotes(notes);
+    renderStickyNotes();
+    setTimeout(() => {
+      const n = document.querySelector(`.sticky-note[data-id="${id}"]`);
+      if (n) n.focus();
+    }, 0);
+  }
+
+  function clearStickyNotes() {
+    if (!confirm("Clear all sticky notes?")) return;
+    storage.remove(STICKY_KEY);
+    renderStickyNotes();
+  }
+
+  document.getElementById("addNoteBtn").addEventListener("click", addStickyNote);
+  document.getElementById("clearNotesBtn").addEventListener("click", clearStickyNotes);
+  renderStickyNotes();
+});
+</script>
+
+</body>
+</html>
